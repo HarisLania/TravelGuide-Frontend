@@ -1,0 +1,107 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+            <div class="blue-gradient-box fixed-icon-box me-2">
+                <span class="material-symbols-outlined">
+                    travel
+                </span>
+            </div>
+            <span class="fs-4 fw-normal">Travel<span class="text-app-blue">Mate</span></span>
+        </div>
+
+        <div class="ai-badge d-flex align-items-center">
+            <i class="fa-solid fa-star text-app-blue me-1 d-none d-md-block"></i>
+            <span class="fw-medium fs-8 d-none d-md-block text-gray">Step 1 of 3 – Tell Us About Your Trip</span>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="content-card">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="material-symbols-outlined fs-1 text-app-yellow">airplane_ticket </span>
+                <div class="d-flex flex-column">
+                    <span class="fw-medium fs-5">Let's Start Your Adventure</span>
+                    <span class="fw-light fs-8">Fill in a few details and we'll personalize your itinerary.</span>
+                </div>
+            </div>
+
+            <form [formGroup]="touristForm" (ngSubmit)="onSubmit()">
+                <div class="row">
+                    <!-- Arrival Airport -->
+                    <div class="col-md-6">
+                        <label class="form-label">Arrival Airport</label>
+                        <mat-form-field appearance="fill" class="custom-field">
+                            <mat-select formControlName="arrivalAirport" placeholder="Select arrival airport">
+                                <mat-option *ngFor="let airport of airports" [value]="airport">{{airport}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Departure Airport -->
+                    <div class="col-md-6">
+                        <label class="form-label">Departure Airport</label>
+                        <mat-form-field appearance="fill" class="custom-field">
+                            <mat-select formControlName="departureAirport" placeholder="Select departure airport">
+                                <mat-option *ngFor="let airport of airports" [value]="airport">{{airport}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Start Date -->
+                    <div class="col-md-6">
+                        <label class="form-label">Travel Start Date</label>
+                        <mat-form-field appearance="fill" class="custom-field">
+                            <input matInput [matDatepicker]="startPicker" formControlName="startDate"
+                                placeholder="dd/mm/yyyy" (click)="startPicker.open()">
+                            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- End Date -->
+                    <div class="col-md-6">
+                        <label class="form-label">Travel End Date</label>
+                        <mat-form-field appearance="fill" class="custom-field">
+                            <input matInput [matDatepicker]="endPicker" formControlName="endDate"
+                                placeholder="dd/mm/yyyy" (click)="endPicker.open()">
+                            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Trip Type -->
+                    <div class="col-md-6">
+                        <label class="form-label">Trip Type</label>
+                        <mat-form-field appearance="fill" class="custom-field">
+                            <mat-select formControlName="tripType" placeholder="Select trip type">
+                                <mat-option *ngFor="let type of tripTypes" [value]="type">{{type}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Cities -->
+                    <div class="col-md-6">
+                        <label class="form-label">Cities To Visit</label>
+                        <div class="cities-list custom-field">
+                            <div class="city-item" *ngFor="let city of cities" (click)="toggleCity(city.name)">
+                                <span>{{city.name}}</span>
+                                <div class="custom-radio"
+                                    [class.checked]="touristForm.get('selectedCities')?.value.includes(city.name)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end mt-5 gap-3">
+                    <button class="back-btn w-20 py-2 rounded-3" routerLink="/">
+                        <b class="btn-fs fw-medium">BACK TO HOME</b>
+                    </button>
+                    <button class="primary-btn w-20 py-2 rounded-3" type="submit">
+                        <b class="btn-fs fw-medium">FIND HOTELS</b>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

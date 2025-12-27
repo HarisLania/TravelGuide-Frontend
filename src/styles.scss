@@ -1,0 +1,29 @@
+// Include theming for Angular Material with `mat.theme()`.
+// This Sass mixin will define CSS variables that are used for styling Angular Material
+// components according to the Material 3 design spec.
+// Learn more about theming and how to use it for your application's
+// custom components at https://material.angular.dev/guide/theming
+@use '@angular/material' as mat;
+@use 'app/app.scss'; // Import global theme and overrides
+
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: radial-gradient(circle at 20% 30%,
+      rgba(80, 120, 255, 0.25),
+      transparent 60%),
+    radial-gradient(circle at 80% 70%,
+      rgba(100, 150, 255, 0.20),
+      transparent 60%),
+    linear-gradient(135deg,
+      #0d1f4d 0%,
+      #254b9d 30%,
+      #2355ac 55%,
+      #254b9d 70%,
+      #0d1f4d 100%);
+  background-attachment: fixed;
+  background-size: cover;
+  background-repeat: no-repeat;
+}

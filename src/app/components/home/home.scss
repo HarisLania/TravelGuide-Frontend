@@ -1,0 +1,21 @@
+@use "../../app.scss" as *;
+
+.discover-badge {
+  background-color: $app-glass;
+  border: 1px solid $app-blue;
+  border-radius: 20px;
+  padding: 6px 30px;
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixed-glass-box {
+  width: 100%; // Make it fluid width to fill the grid column
+  height: auto;
+  min-height: 160px; // Ensure consistent height
+  padding: 1rem;
+}

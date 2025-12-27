@@ -1,0 +1,120 @@
+@use "../../../app.scss" as *;
+
+.trip-card {
+    flex: 0 0 380px; // Slightly wider for the timeline
+    width: 380px;
+
+}
+
+.timeline-container {
+    padding: 16px 0 10px;
+    position: relative;
+}
+
+.timeline-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px; // Gap for rows
+    min-height: 48px;
+
+    &.left {
+        justify-content: flex-start;
+        text-align: left;
+
+        .icon-box {
+            margin-right: 8px;
+        }
+
+        .text-content {
+            padding-right: 8px;
+        }
+    }
+
+    &.right {
+        justify-content: flex-end;
+        text-align: right;
+
+        .icon-box {
+            margin-left: 8px;
+            order: 2;
+        }
+
+        .text-content {
+            order: 1;
+            padding-left: 8px;
+        }
+    }
+}
+
+.icon-box {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 2; // Above connectors
+    position: relative;
+    flex-shrink: 0; // Prevent shrinking when text is long
+
+    span {
+        font-size: 24px;
+    }
+}
+
+// Connectors
+// Logic: Connects center of current icon to center of next icon in the alternating row
+$icon-vertical-center: calc(24px / 2);
+$icon-horizontal-center: calc(48px / 2);
+$line-color: rgba(255, 255, 255, 0.1);
+$line-width: 2px;
+
+.connector-l-to-r {
+    position: absolute;
+    top: $icon-vertical-center;
+    left: $icon-horizontal-center;
+    right: $icon-horizontal-center;
+    height: calc(100% + 28px); // Row height + margin
+    border-left: $line-width solid $line-color;
+    border-bottom: $line-width solid $line-color;
+    border-right: $line-width solid $line-color;
+    border-radius: 0 0 16px 16px; // Rounded bottom corners
+    z-index: 1;
+    pointer-events: none;
+    border-right: none; // Reset
+    border-bottom-left-radius: 20px;
+}
+
+.connector-r-to-l {
+    position: absolute;
+    top: $icon-vertical-center;
+    left: $icon-horizontal-center;
+    right: $icon-horizontal-center;
+    height: calc(100% + 28px);
+    border-right: $line-width solid $line-color;
+    border-bottom: $line-width solid $line-color;
+    border-left: none;
+    border-bottom-right-radius: 20px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.text-content {
+    color: white;
+    flex: 1; // Take remaining space
+    min-width: 0; // Allow shrinking for truncation to work
+
+    .fw-medium {
+        font-weight: 600;
+        font-size: 0.85rem;
+
+        // 2-line truncation
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}

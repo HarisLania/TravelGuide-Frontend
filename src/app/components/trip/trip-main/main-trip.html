@@ -1,0 +1,166 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+            <div class="blue-gradient-box fixed-icon-box me-2">
+                <span class="material-symbols-outlined">
+                    travel
+                </span>
+            </div>
+            <span class="fs-4 fw-normal">Travel<span class="text-app-blue">Mate</span></span>
+        </div>
+
+        <div class="ai-badge d-flex align-items-center">
+            <i class="fa-solid fa-star text-app-blue me-1 d-none d-md-block"></i>
+            <span class="fw-medium fs-8 d-none d-md-block text-gray">Step 3 of 3 – Let's Finalize Your Trip</span>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="content-card">
+            <div class="d-flex flex-column flex-md-row justify-content-md-between align-items-md-center mb-3">
+                <div class="d-flex align-items-center gap-2 mb-2 mb-md-0">
+                    <span class="material-symbols-outlined fs-1 text-app-yellow">travel_luggage_and_bags </span>
+                    <div class="d-flex flex-column">
+                        <span class="fw-medium fs-5">Finalizing Trip</span>
+                        <span class="fw-light fs-8">Review and customize your daily schedule — from attractions to
+                            restaurant stops.</span>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap justify-content-md-end gap-2">
+                    <div class="d-flex align-items-center justify-content-center gap-1">
+                        <div class="fixed-icon-box-sm box-blue">
+                            <span class="material-symbols-outlined">
+                                flight_takeoff
+                            </span>
+                        </div>
+                        <span class="fw-normal fs-7">Airport</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center gap-1">
+                        <div class="fixed-icon-box-sm box-orange">
+                            <span class="material-symbols-outlined">
+                                hotel
+                            </span>
+                        </div>
+                        <span class="fw-normal fs-7">Hotel</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center gap-1">
+                        <div class="fixed-icon-box-sm box-red">
+                            <span class="material-symbols-outlined">
+                                restaurant
+                            </span>
+                        </div>
+                        <span class="fw-normal fs-7">Restaurant</span>
+                    </div>
+                    <div class="d-flex align-items-center justify-content-center gap-1">
+                        <div class="fixed-icon-box-sm box-purple">
+                            <span class="material-symbols-outlined">
+                                attractions
+                            </span>
+                        </div>
+                        <span class="fw-medium fs-7">Attraction</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- Trip Card -->
+            <div class="content-scroll-card d-flex flex-row gap-3 pt-1">
+                <div class="trip-card" *ngFor="let trip of trips; let i = index">
+
+                    <div class="p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h4 class="fw-medium mb-0 fs-5">{{ trip.day }}</h4>
+                        </div>
+
+                        <div class="timeline-container">
+
+                            <div *ngIf="i == 0" class="timeline-row left">
+                                <div class="icon-box box-blue">
+                                    <span class="material-symbols-outlined">flight_takeoff</span>
+                                </div>
+                                <div class="text-content">
+                                    <div class="fw-medium">{{ trip.airport }}</div>
+                                </div>
+                                <div class="connector-l-to-r"></div>
+                            </div>
+
+                            <!-- Hotel -->
+                            <div class="timeline-row" [ngClass]="i === 0 ? 'right' : 'left'">
+                                <div class="icon-box box-orange">
+                                    <span class="material-symbols-outlined">hotel</span>
+                                </div>
+                                <div class="text-content">
+                                    <div class="fw-medium">{{ trip.hotel }}</div>
+                                </div>
+                                <div class="connector-l-to-r" *ngIf="trip.activities?.length || i == trips.length - 1">
+                                </div>
+                            </div>
+
+                            <!-- If Complex Day (Activities exist) -->
+                            <ng-container *ngFor="let activity of trip.activities; let j = index">
+                                <div class="timeline-row" [ngClass]="j % 2 != 0 ? 'left'
+                                        : 'right'">
+                                    <div [ngClass]="j % 2 != 0 ? 'connector-l-to-r'
+                                        : 'connector-r-to-l'"></div>
+                                    <div class="icon-box" [ngClass]=" activity.type==='Restaurant' ? 'box-red'
+                                        : 'box-purple'">
+                                        <span class="material-symbols-outlined">{{ activity.type.toLowerCase() }}</span>
+                                    </div>
+                                    <div class="text-content">
+                                        <div class="fw-medium">{{ activity.name }}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+
+                            <div *ngIf="trip.activities.length > 0" class="timeline-row"
+                                [ngClass]="trip.activities.length % 2 != 0 ? 'left' : 'right'">
+                                <div *ngIf="i == trips.length - 1" [ngClass]="trip.activities.length % 2 != 0 ? 'connector-l-to-r'
+                                        : 'connector-r-to-l'"></div>
+                                <div class="icon-box box-orange">
+                                    <span class="material-symbols-outlined">travel</span>
+                                </div>
+                                <div class="text-content">
+                                    <div class="fw-medium">{{ trip.hotel }}</div>
+                                </div>
+                            </div>
+
+                            <div *ngIf="i == trips.length - 1" class="timeline-row"
+                                [ngClass]="((trip.activities.length + 1) % 2 != 0 && trip.activities.length > 0) ? 'left' : 'right'">
+                                <div class="icon-box box-blue">
+                                    <span class="material-symbols-outlined">flight_takeoff</span>
+                                </div>
+                                <div class="text-content">
+                                    <div class="fw-medium">{{ trip.airport }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex gap-2 mb-2">
+                            <button class="btn book-btn w-100" (click)="openViewModal(trip, i)">
+                                <i class="fa-solid fa-rectangle-list"></i> View
+                            </button>
+                            <button class="btn update-btn w-100" (click)="openUpdateModal(trip, i)">
+                                <i class="fa-regular fa-pen-to-square"></i> Update Plan
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-5 gap-3">
+                <button class="back-btn w-20 py-2 rounded-3" routerLink="/">
+                    <b class="btn-fs fw-medium">BACK TO HOME</b>
+                </button>
+                <button class="primary-btn w-20 py-2 rounded-3" type="submit">
+                    <b class="btn-fs fw-medium">TRIP PLANNING</b>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <app-update-trip *ngIf="selectedTrip" [trip]="selectedTrip" (close)="closeUpdateModal()"></app-update-trip>
+    <app-view-trip *ngIf="viewTrip" [trip]="viewTrip" [isFirst]="viewTrip.index == 0"
+        [isLast]="viewTrip.index == trips.length - 1" (close)="closeViewModal()"></app-view-trip>
+</div>

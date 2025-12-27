@@ -1,0 +1,120 @@
+@use "../../app.scss" as *;
+
+
+
+.form-label {
+    color: white;
+    margin-bottom: 0.3rem;
+    font-size: 0.7rem;
+    display: block;
+    font-weight: 500;
+}
+
+// Custom Field Styling (Material Overrides)
+::ng-deep {
+    .custom-field {
+        width: 100%;
+
+        .mat-mdc-text-field-wrapper {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            border-radius: 8px !important;
+            padding: 0 12px;
+        }
+
+        .mat-mdc-form-field-infix {
+            padding-top: 15px !important; // 3. Fix the padding after I removed the label (vertically center)
+            padding-bottom: 15px !important;
+            min-height: auto !important;
+            font-size: 0.85rem !important;
+        }
+
+        .mat-mdc-form-field-underline {
+            display: none;
+        }
+
+        input,
+        .mat-mdc-select-value {
+            color: white !important;
+        }
+
+        .mat-mdc-select-arrow {
+            color: white !important;
+        }
+
+        .mdc-line-ripple {
+            display: none !important;
+        }
+    }
+
+    .mat-datepicker-toggle {
+        color: white !important;
+    }
+}
+
+// Cities List
+.cities-list {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.2rem;
+    max-height: 120px;
+    overflow-y: auto;
+
+    /* Custom Scrollbar */
+    &::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.15);
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $app-blue;
+        border-radius: 10px;
+
+        &:hover {
+            background: $app-blue-overlay;
+        }
+    }
+
+    .city-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 10px;
+        cursor: pointer;
+        border-radius: 6px;
+        transition: background 0.2s;
+        color: white;
+        font-size: 0.85rem;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .custom-radio {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            position: relative;
+
+            &.checked {
+                border-color: $app-blue;
+                background-color: rgba(255, 255, 255, 0.1);
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    width: 10px;
+                    height: 10px;
+                    background-color: $app-blue;
+                    border-radius: 50%;
+                }
+            }
+        }
+    }
+}

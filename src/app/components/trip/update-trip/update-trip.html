@@ -1,0 +1,269 @@
+<div class="modal-overlay" (click)="close.emit()">
+    <div class="modal-content modal-xl" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="blue-gradient-box fixed-icon-box me-2">
+                        <span class="material-symbols-outlined">edit_calendar</span>
+                    </div>
+                </div>
+                <h4 class="fw-bold mb-0 text-white">UPDATE TRIP <span class="fw-normal" *ngIf="trip">- {{
+                        trip.day
+                        }}</span></h4>
+            </div>
+
+            <button class="close-btn" (click)="close.emit()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="row h-100 g-0">
+                <!-- Current Plan -->
+                <div class="col-md-4 current-plan-card">
+                    <div class="d-flex align-items-center justify-content-center h-100"
+                        *ngIf="trip.activities.length === 0">
+                        <div class="px-4 text-center">
+                            <div class="empty-icon-wrapper">
+                                <span class="material-symbols-outlined empty-icon">hourglass_empty</span>
+                            </div>
+                            <h6 class="fw-bold mb-2 text-dark">No Plan For Today</h6>
+                            <p class="text-muted small mb-4">Your day's empty! Take a rest or explore something new
+                                nearby.
+                            </p>
+
+                            <div class="d-flex justify-content-center gap-2">
+                                <button
+                                    class="btn box-red w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
+                                    (click)="openForm('restaurant')">
+                                    Restaurant <span class="material-symbols-outlined ms-2"
+                                        style="font-size: 18px;">add_circle</span>
+                                </button>
+                                <button
+                                    class="btn box-purple w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
+                                    (click)="openForm('attraction')">
+                                    Attraction <span class="material-symbols-outlined ms-2"
+                                        style="font-size: 18px;">add_circle</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="d-flex flex-column h-100" *ngIf="trip.activities.length > 0">
+                        <div class="activities-scroll-container pt-3">
+                            <p class="fw-medium fs-5 mb-2">
+                                Current Day Plan
+                            </p>
+                            <div class="activity-card d-flex align-items-center justify-content-between"
+                                *ngFor="let activity of trip.activities"
+                                [class.selected]="selectedActivity === activity" (click)="selectActivity(activity)">
+                                <div class="activity-info">
+                                    <span class="fw-normal fs-6">{{ activity.name }}</span>
+                                    <span class="text-light fs-7">{{ getActivityTime(activity.subType) }}</span>
+                                </div>
+                                <div class="fixed-icon-box-sm"
+                                    [ngClass]="activity.type == 'Restaurant' ? 'box-red' : 'box-purple'">
+                                    <span class="material-symbols-outlined activity-type-icon">{{
+                                        getActivityIcon(activity.type) }}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="fixed-bottom-buttons d-flex gap-2" *ngIf="isMissingMeal() || isMissingAttraction()">
+                            <button
+                                class="btn box-red w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
+                                *ngIf="isMissingMeal()" (click)="openForm('restaurant')">
+                                Restaurant <span class="material-symbols-outlined ms-2"
+                                    style="font-size: 18px;">add_circle</span>
+                            </button>
+                            <button
+                                class="btn box-purple w-100 rounded-pill fw-bold d-flex align-items-center justify-content-center"
+                                *ngIf="isMissingAttraction()" (click)="openForm('attraction')">
+                                Attraction <span class="material-symbols-outlined ms-2"
+                                    style="font-size: 18px;">add_circle</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="col-md-8 ps-3 h-100">
+                    <div class="current-plan-card">
+                        <div class="d-flex flex-column h-100">
+                            <div class="activities-scroll-container">
+                                <div class="d-flex align-items-center justify-content-center h-100"
+                                    *ngIf="activeForm === null">
+                                    <div class="text-center">
+                                        <div class="empty-icon-wrapper mb-3">
+                                            <span class="material-symbols-outlined empty-icon">touch_app</span>
+                                        </div>
+                                        <p class="text-muted">Please select a form to fill out.</p>
+                                    </div>
+                                </div>
+                                <form [formGroup]="restaurantForm" *ngIf="activeForm === 'restaurant'" class="py-3">
+                                    <div>
+                                        <label class="form-label">Meal Time</label>
+                                        <mat-form-field appearance="fill" class="custom-field">
+                                            <mat-select formControlName="mealTime" placeholder="Select meal time">
+                                                <mat-option value="Breakfast">Breakfast</mat-option>
+                                                <mat-option value="Lunch">Lunch</mat-option>
+                                                <mat-option value="Dinner">Dinner</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div>
+                                        <label class="form-label">Close to Hotel</label>
+                                        <mat-form-field appearance="fill" class="custom-field">
+                                            <mat-select formControlName="closeToHotel" placeholder="Select option">
+                                                <mat-option [value]="true">Yes</mat-option>
+                                                <mat-option [value]="false">No</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                    <div class="mb-3 mt-5">
+                                        <label class="form-label mb-2">Preferences</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="button" *ngFor="let pref of preferences"
+                                                class="preference-tag" [class.active]="isSelected(pref, restaurantForm)"
+                                                (click)="togglePreference(pref, restaurantForm)">
+                                                {{ pref }}
+                                                <i class="fa-solid fa-xmark ms-2"
+                                                    *ngIf="isSelected(pref, restaurantForm)"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea formControlName="description" class="form-control app-textarea"
+                                            rows="4" placeholder="Enter description"></textarea>
+                                    </div>
+                                    <div class="d-flex justify-content-end">
+                                        <button class="primary-btn w-20 py-2 rounded-3" type="submit">
+                                            <b class="btn-fs fw-medium">ADD TO PLAN</b>
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <form [formGroup]="attractionForm" *ngIf="activeForm === 'attraction'" class="py-3">
+                                    <div class="d-flex flex-row justify-content-between gap-2 mb-2">
+                                        <div class="w-100">
+                                            <label class="form-label">Attraction Time</label>
+                                            <mat-form-field appearance="fill" class="custom-field">
+                                                <mat-select formControlName="attractionTime" placeholder="Select time">
+                                                    <mat-option value="Morning">Morning</mat-option>
+                                                    <mat-option value="Afternoon">Afternoon</mat-option>
+                                                    <mat-option value="Evening">Evening</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                        <div class="w-100">
+                                            <label class="form-label">Hotel Pickup</label>
+                                            <mat-form-field appearance="fill" class="custom-field">
+                                                <mat-select formControlName="hotelPickup" placeholder="Select option">
+                                                    <mat-option [value]="true">Yes</mat-option>
+                                                    <mat-option [value]="false">No</mat-option>
+                                                </mat-select>
+                                            </mat-form-field>
+                                        </div>
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label mb-2">Preferences</label>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <button type="button" *ngFor="let pref of preferences"
+                                                class="preference-tag" [class.active]="isSelected(pref, attractionForm)"
+                                                (click)="togglePreference(pref, attractionForm)">
+                                                {{ pref }}
+                                                <i class="fa-solid fa-xmark ms-2"
+                                                    *ngIf="isSelected(pref, attractionForm)"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Description</label>
+                                        <textarea formControlName="description" class="form-control app-textarea"
+                                            rows="2" placeholder="Enter description"></textarea>
+                                    </div>
+                                    <ng-container *ngIf="isGenerated else generateBtn">
+                                        <div class="activity-card shadow-sm mt-3 p-0">
+                                            <div
+                                                class="d-flex flex-row justify-content-between align-items-center w-100 box-purple p-2  border-0 rounded-top text-white">
+                                                <div class=" d-flex align-items-center ">
+                                                    <span class="material-symbols-outlined me-1">attractions</span>
+                                                    <h6 class="mb-0 fw-medium">Attraction Details</h6>
+                                                </div>
+                                                <button class="btn btn-blue-gradient px-4 fw-normal">
+                                                    Update Plan
+                                                </button>
+                                            </div>
+
+                                            <div class="rounded-bottom p-2">
+                                                <div class="border-bottom mb-2">
+                                                    <h5 class="fw-medium mb-2 fs-5">{{
+                                                        generatedAttraction.name }}</h5>
+                                                </div>
+                                                <div class="row g-3 ">
+                                                    <div class="col-md-5">
+                                                        <div class="d-flex align-items-center mb-2 text-dark">
+                                                            <span
+                                                                class="material-symbols-outlined  me-1 fs-5">location_on</span>
+                                                            <span class="small fw-normal">{{
+                                                                generatedAttraction.location }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2 text-dark">
+                                                            <span
+                                                                class="material-symbols-outlined text-warning me-2 fs-5">star</span>
+                                                            <span class="small fw-normal">{{ generatedAttraction.rating
+                                                                }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2 text-dark">
+                                                            <span
+                                                                class="material-symbols-outlined text-info me-2 fs-5">hourglass_empty</span>
+                                                            <span class="small fw-normal">{{
+                                                                generatedAttraction.duration }}</span>
+                                                        </div>
+                                                        <div class="d-flex align-items-center mb-2 text-dark">
+                                                            <span
+                                                                class="material-symbols-outlined text-primary me-2 fs-5">directions_car</span>
+                                                            <span class="small fw-normal">{{ generatedAttraction.pickup
+                                                                }}</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-7">
+                                                        <div class="activity-card p-2 rounded">
+                                                            <div
+                                                                class="d-flex justify-content-between align-items-center mb-2">
+                                                                <h6 class="fw-medium mb-0 fs-7">About The Place</h6>
+                                                                <a href="#"
+                                                                    class="text-decoration-none small text-app-blue fw-medium fs-7"
+                                                                    onclick="return false;">Book Online</a>
+                                                            </div>
+                                                            <p class="fs-8 text-light mb-0" style="line-height: 1.4;">
+                                                                {{ generatedAttraction.description }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button (click)="generateActivity()" class="btn box-teal w-100 py-2 rounded-3"
+                                            type="button">
+                                            <b class="btn-fs fw-medium">GENERATE AGAIN</b>
+                                        </button>
+                                    </ng-container>
+                                    <ng-template #generateBtn>
+                                        <button (click)="generateActivity()" class="btn box-teal w-100 py-2 rounded-3"
+                                            type="button">
+                                            <b class="btn-fs fw-medium">GENERATE ATTRACTION</b>
+                                        </button>
+                                    </ng-template>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

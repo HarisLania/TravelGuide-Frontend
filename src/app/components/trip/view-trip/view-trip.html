@@ -1,0 +1,207 @@
+<div class="modal-overlay" (click)="close.emit()">
+    <div class="modal-content modal-xl" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center ">
+                <div class="d-flex align-items-center justify-content-center">
+                    <div class="blue-gradient-box fixed-icon-box me-2">
+                        <span class="material-symbols-outlined">travel_explore</span>
+                    </div>
+                </div>
+                <h4 class="fw-bold mb-0 text-white">VIEW PLAN <span class="fw-normal" *ngIf="trip">- {{
+                        trip.day
+                        }}</span></h4>
+            </div>
+
+            <button class="close-btn" (click)="close.emit()">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
+
+        <div class="row g-4 modal-body">
+            <!-- Left: Timeline -->
+            <div class="col-md-6 h-100">
+                <div class="timeline-scroll-container custom-scroll">
+                    <div class="timeline-wrapper p-2">
+
+                        <div *ngIf="isFirst" class="timeline-item d-flex flex-row w-100 mb-0">
+                            <div class="content-box box-blue" style="width: 45%;">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="fw-semibold">{{ trip?.airport }}</span>
+                                </div>
+                            </div>
+
+                            <div class="flex-grow-1 position-relative d-flex justify-content-center">
+                                <div class="line-vertical-bottom"></div>
+                                <div class="line-horizontal line-left"></div>
+                            </div>
+
+                            <div style="width: 45%;"></div>
+                        </div>
+
+                        <div class="timeline-item d-flex w-100 mb-0"
+                            [ngClass]="isFirst ? 'flex-row-reverse' : 'flex-row'">
+                            <div class="content-box box-orange" style="width: 45%;">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="fw-semibold">{{ trip?.hotel }}</span>
+                                </div>
+                            </div>
+
+                            <div *ngIf="!isFirst" class="flex-grow-1 position-relative d-flex justify-content-center">
+                                <div class="line-vertical-bottom"></div>
+                                <div class="line-horizontal line-left"></div>
+                            </div>
+
+                            <div *ngIf="isFirst"
+                                class="flex-grow-1 position-relative d-flex justify-content-center align-items-center"
+                                style="min-height: 20px;">
+
+                                <!-- Vertical Line spans full height of this section -->
+                                <div class="line-vertical-top"></div>
+
+                                <!-- The Dot -->
+                                <div class="connector-dot-sm box-teal">
+                                    <span class="material-symbols-outlined fs-6">location_on</span>
+                                </div>
+
+                                <!-- Horizontal Line -->
+                                <div class="line-horizontal line-right">
+                                </div>
+                            </div>
+
+                            <div style="width: 45%;"></div>
+                        </div>
+
+                        <!-- Activities Loop -->
+                        <ng-container *ngFor="let activity of trip?.activities; let i = index">
+                            <div class="timeline-item d-flex w-100"
+                                [ngClass]="i % 2 === 0 ? 'flex-row-reverse' : 'flex-row'">
+
+                                <!-- The card -->
+                                <div class="content-box"
+                                    [ngClass]="activity.type === 'Restaurant' ? 'box-red' : 'box-purple'"
+                                    style="width: 45%;">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <span class="fw-semibold">{{ activity.name }}</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 fs-8 mb-1 text-white-70">
+                                        <span class="material-symbols-outlined fs-6">location_on</span>
+                                        <span>{{ activity.location }}</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 fs-8 mb-1 text-warning"
+                                        *ngIf="activity.rating">
+                                        <span class="material-symbols-outlined fs-6">star</span>
+                                        <span>{{ activity.rating }}</span>
+                                    </div>
+
+                                    <div class="d-flex align-items-center gap-2 fs-8 text-info"
+                                        *ngIf="activity.distance">
+                                        <span class="material-symbols-outlined fs-6">directions_car</span>
+                                        <span>{{ activity.distance }}</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2 fs-8 text-info"
+                                        *ngIf="activity.pickup && activity.pickup !== 'No'">
+                                        <span class="material-symbols-outlined fs-6">directions_bus</span>
+                                        <span>Pickup: {{ activity.pickup }}</span>
+                                    </div>
+                                </div>
+
+                                <!-- Center Connector -->
+                                <div class="flex-grow-1 position-relative d-flex justify-content-center align-items-center"
+                                    style="min-height: 120px;">
+
+                                    <!-- Vertical Line spans full height of this section -->
+                                    <div class="line-vertical-full"></div>
+
+                                    <!-- The Dot -->
+                                    <div class="connector-dot-sm box-teal">
+                                        <span class="material-symbols-outlined fs-6">location_on</span>
+                                    </div>
+
+                                    <!-- Horizontal Line -->
+                                    <div class="line-horizontal" [ngClass]="i % 2 === 0 ? 'line-right' : 'line-left'">
+                                    </div>
+                                </div>
+
+                                <!-- Spacer -->
+                                <div style="width: 45%;"></div>
+                            </div>
+                        </ng-container>
+
+                        <div class="timeline-item d-flex flex-row w-100" *ngIf="trip?.activities?.length > 0">
+                            <div class="d-flex w-100"
+                                [ngClass]="trip?.activities?.length % 2 === 0 ? 'flex-row-reverse' : 'flex-row'">
+                                <div class="content-box box-orange" style="width: 45%;">
+                                    <div class="d-flex align-items-center gap-2 mb-1">
+                                        <span class="fw-semibold">{{ trip?.hotel }}</span>
+                                    </div>
+                                </div>
+
+                                <div class="flex-grow-1 position-relative d-flex justify-content-center">
+                                    <!-- Line from top -->
+                                    <div [ngClass]="isLast ? 'line-vertical-full' : 'line-vertical-top  '"></div>
+                                    <div class="d-flex align-items-center gap-2 fs-7 mb-1 text-white-70">
+                                        <div class="connector-dot-sm box-teal">
+                                            <span class="material-symbols-outlined fs-6">location_on</span>
+                                        </div>
+                                    </div>
+                                    <div class="line-horizontal"
+                                        [ngClass]="trip?.activities?.length % 2 === 0 ? 'line-right' : 'line-left'">
+                                    </div>
+                                </div>
+
+                                <div style="width: 45%;"></div>
+                            </div>
+
+
+                        </div>
+
+                        <div *ngIf="isLast" class="timeline-item d-flex flex-row w-100 mb-0"
+                            [ngClass]="((trip.activities?.length || 0) + 1) % 2 !== 0 && (trip.activities?.length || 0) > 0 ? 'flex-row' : 'flex-row-reverse'">
+                            <div class="content-box box-blue" style="width: 45%;">
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <span class="fw-semibold">{{ trip?.airport }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Center Connector -->
+                            <div class="flex-grow-1 position-relative d-flex justify-content-center align-items-center"
+                                style="min-height: 20px;">
+
+                                <!-- Vertical Line spans full height of this section -->
+                                <div class="line-vertical-top"></div>
+
+                                <!-- The Dot -->
+                                <div class="connector-dot-sm box-teal">
+                                    <span class="material-symbols-outlined fs-6">location_on</span>
+                                </div>
+
+                                <!-- Horizontal Line -->
+                                <div class="line-horizontal"
+                                    [ngClass]="((trip.activities?.length || 0) + 1) % 2 !== 0 && (trip.activities?.length || 0) > 0 ? 'line-left' : 'line-right'">
+                                </div>
+                            </div>
+
+                            <div style="width: 45%;"></div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Map -->
+            <div class="col-md-6">
+                <div class=" map-container h-100 w-100 rounded-4 overflow-hidden position-relative border
+                border-white-50">
+                    <iframe width="100%" height="100%" style="border:0" loading="lazy" allowfullscreen
+                        [src]="getMapUrl()">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

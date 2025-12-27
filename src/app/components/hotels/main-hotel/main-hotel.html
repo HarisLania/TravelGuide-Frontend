@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div class="d-flex align-items-center">
+            <div class="blue-gradient-box fixed-icon-box me-2">
+                <span class="material-symbols-outlined">
+                    travel
+                </span>
+            </div>
+            <span class="fs-4 fw-normal">Travel<span class="text-app-blue">Mate</span></span>
+        </div>
+
+        <div class="ai-badge d-flex align-items-center">
+            <i class="fa-solid fa-star text-app-blue me-1 d-none d-md-block"></i>
+            <span class="fw-medium fs-8 d-none d-md-block text-gray">Step 2 of 3 – Let's Find Your Hotels</span>
+        </div>
+    </div>
+
+    <div class="d-flex align-items-center justify-content-center">
+        <div class="content-card">
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="material-symbols-outlined fs-1 text-app-yellow">apartment </span>
+                <div class="d-flex flex-column">
+                    <span class="fw-medium fs-5">Selected Hotels</span>
+                    <span class="fw-light fs-8">Review and update your stay options for each city.</span>
+                </div>
+            </div>
+
+            <!-- Hotel Card -->
+            <div class="content-scroll-card d-flex flex-row gap-3  pt-1">
+                <div class="hotel-card mb-3" *ngFor="let hotel of hotels">
+
+                    <div class="badge-white start-0 d-flex align-items-center">
+                        <i class="fa-solid fa-map-pin text-app-danger fs-5"></i>
+                        <span class="fw-medium fs-5">{{ hotel.city }}</span>
+                    </div>
+
+                    <div class="p-3">
+                        <h4 class="fw-medium mb-3 fs-4">{{ hotel.name }}</h4>
+                        <div class="d-flex flex-column gap-2 mb-3">
+                            <div class="d-flex align-items-center gap-2 text-muted fs-6">
+                                <i class="fa-regular fa-calendar text-app-teal"></i>
+                                <span class="fw-medium">{{ hotel.dates }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 fs-6">
+                                <i class="fa-solid fa-star text-warning"></i>
+                                <span class="rating-text">{{ hotel.rating }} • {{ hotel.review }}</span>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 text-muted fs-6">
+                                <i class="fa-solid fa-location-dot text-app-danger"></i>
+                                <span class="fw-medium">{{ hotel.location }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Amenities -->
+                        <div class="amenities-container py-2 px-3 mb-4">
+                            <span class="fw-medium">{{ hotel.amenities }}</span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="d-flex gap-2 mb-2">
+                            <button class="btn direction-btn w-100">
+                                <i class="fa-solid fa-location-arrow"></i> Directions
+                            </button>
+                            <button class="btn book-btn w-100">
+                                <i class="fa-solid fa-book-open"></i> Book Now
+                            </button>
+                        </div>
+
+                        <button class="btn update-btn w-100" (click)="openUpdateModal(hotel)">
+                            <i class="fa-regular fa-pen-to-square"></i> Update Hotel
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-end mt-5 gap-3">
+                <button class="back-btn w-20 py-2 rounded-3" routerLink="/">
+                    <b class="btn-fs fw-medium">BACK TO HOME</b>
+                </button>
+                <button class="primary-btn w-20 py-2 rounded-3" routerLink="/trip">
+                    <b class="btn-fs fw-medium">TRIP PLANNING</b>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <app-update-hotel *ngIf="selectedHotel" [hotel]="selectedHotel" (close)="closeUpdateModal()"></app-update-hotel>
+</div>

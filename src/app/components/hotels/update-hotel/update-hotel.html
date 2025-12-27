@@ -1,0 +1,51 @@
+<div class="modal-overlay" (click)="onClose()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div class="modal-header d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <div class="blue-gradient-box fixed-icon-box me-2">
+                    <span class="material-symbols-outlined">apartment</span>
+                </div>
+                <h2 class="fw-medium m-0 fs-5">UPDATING {{ hotel?.city | uppercase }} HOTEL</h2>
+            </div>
+            <button class="close-btn" (click)="onClose()">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div class="modal-body custom-scrollbar">
+            <!-- Preferences Section -->
+            <div class="mb-4">
+                <h5 class="fw-normal mb-2 fs-6">Select Hotel Preferences</h5>
+
+                <div class="search-box mb-3">
+                    <input type="text" placeholder="Search Preferences" class="form-control app-input">
+                </div>
+
+                <div class="d-flex flex-wrap gap-2">
+                    <button *ngFor="let pref of preferences" class="preference-tag" [class.active]="isSelected(pref)"
+                        (click)="togglePreference(pref)">
+                        {{ pref }}
+                        <i class="fa-solid fa-xmark ms-2" *ngIf="isSelected(pref)"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Requirements Section -->
+            <div class="mb-4">
+                <h5 class="fw-normal mb-2 fs-6">Describe Your Requirements (optional)</h5>
+                <textarea class="form-control app-textarea" rows="4"
+                    placeholder="Describe your details if not mentioned in the preferences"></textarea>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="modal-footer d-flex justify-content-end pt-3">
+            <button class="primary-btn w-20 py-2 rounded-3" routerLink="/">
+                <b class="btn-fs fw-medium">GENERATE HOTEL</b>
+            </button>
+        </div>
+
+    </div>
+</div>
